@@ -35,6 +35,7 @@ function! s:format_tabpagenr(index, tabpagenr) abort
 endfunction
 
 function! ctrlp#tabpage#init(...) abort
+  call s:syntax()
   let tabpage_list = map(range(1, tabpagenr('$')), function('<SID>format_tabpagenr'))
   return tabpage_list
 endfunction
@@ -43,6 +44,13 @@ function! ctrlp#tabpage#accept(mode, str) abort
   call ctrlp#exit()
   let tabpagenr = matchstr(a:str, '^\d\+')
   execute 'tabnext ' . tabpagenr
+endfunction
+
+function! s:syntax() abort
+  syntax match ctrlpTabpageTabpageNr /\d\+/
+  syntax match ctrlpTabpageBufferName /\S\+$/
+  highlight link ctrlpTabpageTabpageNr Constant
+  highlight link ctrlpTabpageBufferName Normal
 endfunction
 
 let &cpo = s:save_cpo
