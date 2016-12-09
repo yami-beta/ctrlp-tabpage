@@ -20,7 +20,8 @@ endfunction
 
 function! s:format_tabpagenr(index, tabpagenr) abort
   let winid = win_getid(tabpagewinnr(a:tabpagenr), a:tabpagenr)
-  if a:tabpagenr == tabpagenr()
+  let is_current_tabpage = a:tabpagenr == tabpagenr()
+  if is_current_tabpage
     let winid = win_getid(tabpagewinnr(a:tabpagenr, '#'), a:tabpagenr)
   endif
   let buffer_info = getbufinfo(getwininfo(winid)[0].bufnr)[0]
@@ -29,7 +30,8 @@ function! s:format_tabpagenr(index, tabpagenr) abort
     let filepath = '[No Name]'
   endif
   let separator = repeat(' ', 4 - len(string(a:tabpagenr)))
-  return a:tabpagenr . separator . filepath
+  let current_tabpage_mark = is_current_tabpage ? ' * ' : '   '
+  return a:tabpagenr . separator . current_tabpage_mark . filepath
 endfunction
 
 function! ctrlp#tabpage#init(...) abort
