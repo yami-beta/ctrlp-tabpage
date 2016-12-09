@@ -20,17 +20,16 @@ endfunction
 
 function! s:format_tabpagenr(index, tabpagenr) abort
   let winid = win_getid(tabpagewinnr(a:tabpagenr), a:tabpagenr)
-  let buffer_info = getbufinfo(getwininfo(winid)[0].bufnr)[0]
-  let buffer_name = fnamemodify(buffer_info.name, ':t')
-  if buffer_name =~ '^ControlP'
+  if a:tabpagenr == tabpagenr()
     let winid = win_getid(tabpagewinnr(a:tabpagenr, '#'), a:tabpagenr)
-    let buffer_info = getbufinfo(getwininfo(winid)[0].bufnr)[0]
-    let buffer_name = fnamemodify(buffer_info.name, ':t')
-  elseif buffer_name == ''
-    let buffer_name = '[No Name]'
+  endif
+  let buffer_info = getbufinfo(getwininfo(winid)[0].bufnr)[0]
+  let filepath = fnamemodify(buffer_info.name, ':.')
+  if filepath == ''
+    let filepath = '[No Name]'
   endif
   let separator = repeat(' ', 4 - len(string(a:tabpagenr)))
-  return a:tabpagenr . separator . buffer_name
+  return a:tabpagenr . separator . filepath
 endfunction
 
 function! ctrlp#tabpage#init(...) abort
